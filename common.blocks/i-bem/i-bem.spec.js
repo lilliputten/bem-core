@@ -274,6 +274,26 @@ describe('i-bem', function() {
             baseMethodSpy.should.have.been.calledOnce;
 
         });
+
+        it('should process several mixins', function() {
+            var mixin1MethodSpy = sinon.spy(),
+                mixin2MethodSpy = sinon.spy(),
+                Mixin1 = bem.declMixin({ mixin1Method : mixin1MethodSpy }),
+                Mixin2 = bem.declMixin({ mixin2Method : mixin2MethodSpy }),
+                Block = bem
+                    .declBlock('block')
+                    .declMod({ modName : 'mod', modVal : true }, [Mixin1, Mixin2]),
+                instance = new Block({ mod : true });
+
+            // Mixin' methods
+            instance.mixin1Method();
+            instance.mixin2Method();
+
+            // Both methods must be called
+            mixin1MethodSpy.should.have.been.calledOnce;
+            mixin2MethodSpy.should.have.been.calledOnce;
+
+        });
     });
 
     describe('create', function() {
