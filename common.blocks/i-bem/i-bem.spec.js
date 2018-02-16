@@ -238,8 +238,7 @@ describe('i-bem', function() {
                 Mixin = bem.declMixin({ mixinMethod : mixinMethodSpy }),
                 Block = bem
                     .declBlock('block', { method : baseMethodSpy })
-                    .declMod({ modName : 'mod', modVal : true }, Mixin, { method : modsMethodSpy })
-                ,
+                    .declMod({ modName : 'mod', modVal : true }, Mixin, { method : modsMethodSpy }),
                 instance = new Block({ mod : true });
 
             // mod method
@@ -263,8 +262,7 @@ describe('i-bem', function() {
                 Mixin = bem.declMixin({ method : function(){ mixinOverridedMethodSpy(); this.__base(); } }),
                 Block = bem
                     .declBlock('block', { method : baseMethodSpy })
-                    .declMod({ modName : 'mod', modVal : true }, Mixin, { method : function(){ modsMethodSpy(); this.__base(); } })
-                ,
+                    .declMod({ modName : 'mod', modVal : true }, Mixin, { method : function(){ modsMethodSpy(); this.__base(); } }),
                 instance = new Block({ mod : true });
 
             // Common method

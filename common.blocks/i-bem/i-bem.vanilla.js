@@ -467,13 +467,13 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
         });
 
         // If `base` is a list of mixins or single proto...
-        if ( Array.isArray(base) || typeof base === 'function' ) {
+        if(Array.isArray(base) || typeof base === 'function') {
             // ...Prepending main prototype to list
             base = [this].concat(base);
         }
         // ...Unexpected `base`...
-        else if ( base ) {
-            throw new Error ('`Base` must be prototype or list of prototypes ({Function|Array[Function]})');
+        else if(base) {
+            throw new Error('Mixin parameter `base` must be prototype or list of prototypes: `{Function|Array[Function]}`');
         }
         // No `base`...
         else {
