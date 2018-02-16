@@ -230,6 +230,54 @@ describe('i-bem', function() {
         });
     });
 
+    describe('declMod with mixins', function() {
+        it('should contain methods from mod and mixin', function() {
+            var baseMethodSpy = sinon.spy(),
+                modsMethodSpy = sinon.spy(),
+                mixinMethodSpy = sinon.spy(),
+                Mixin = bem.declMixin({ mixinMethod : mixinMethodSpy }),
+                Block = bem
+                    .declBlock('block', { method : baseMethodSpy })
+                    .declMod({ modName : 'mod', modVal : true }, Mixin, { method : modsMethodSpy })
+                ,
+                instance = new Block({ mod : true });
+
+            // mod method
+            instance.method();
+            // Mixin-only method
+            instance.mixinMethod();
+
+            // Both methods must be called
+            modsMethodSpy.should.have.been.calledOnce;
+            mixinMethodSpy.should.have.been.calledOnce;
+
+            // Base method mustn't be called: `this.__base` not used
+            baseMethodSpy.should.not.have.been.called;
+
+        });
+
+        it('should inherit methods from mod and mixin', function() {
+            var baseMethodSpy = sinon.spy(),
+                modsMethodSpy = sinon.spy(),
+                mixinOverridedMethodSpy = sinon.spy(),
+                Mixin = bem.declMixin({ method : function(){ mixinOverridedMethodSpy(); this.__base(); } }),
+                Block = bem
+                    .declBlock('block', { method : baseMethodSpy })
+                    .declMod({ modName : 'mod', modVal : true }, Mixin, { method : function(){ modsMethodSpy(); this.__base(); } })
+                ,
+                instance = new Block({ mod : true });
+
+            // Common method
+            instance.method();
+
+            // All methods must be called
+            modsMethodSpy.should.have.been.calledOnce;
+            mixinOverridedMethodSpy.should.have.been.calledOnce;
+            baseMethodSpy.should.have.been.calledOnce;
+
+        });
+    });
+
     describe('create', function() {
         it('should return instance of block', function() {
             var Block = bem.declBlock('block', {}),
